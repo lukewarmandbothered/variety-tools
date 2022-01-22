@@ -7,9 +7,9 @@ Created on Fri Jan 14 14:21:10 2022
 
 @author: Alex Boisvert
 """
-# Words should be length at least 5
-MIN_WORD_LENGTH = 5
-# The min overlap should be 3 (?!)
+# The smallest length for words in the spiral
+MIN_WORD_LENGTH = 4
+# The minimum overlap of words
 MIN_OVERLAP = 2
 # Minimum score of word list entries
 MIN_SCORE = 80
@@ -69,11 +69,11 @@ print(len(good_words))
 forward_words = []
 backward_words = []
 
-forward_words = ['SENEGAL']
-backward_words = ['GENES']
+forward_words = ['GARDENING']
+backward_words = ['DRAG']
 
-#forward_words = '''SENEGAL RACECAR RETRIAL CELLO TASTED ACTRESS EDWARD REVOKE BERTHA ROTATES EPSON ONEILL IMSURE'''.split(' ')
-#backward_words = '''MILLIE NONOS PESETA TORAH TREBEK OVERDRAW DESSERT CADETS ATOLL ECLAIR TERRACE CARLA GENES'''.split(' ')
+forward_words = '''GARDENING ROBROY AMINOR OMEGA TOOFAR AGAINST OPEDPAGE DARTED ISAIDNO IBET'''.split(' ')
+backward_words = '''BIONDI ASIDE TRADEGAP DEPOTS NIAGARA FOOTAGE MORONI MAYOR BORGNINE DRAG'''.split(' ')
 
 forward_word = forward_words[-1]
 backward_word = backward_words[0]
