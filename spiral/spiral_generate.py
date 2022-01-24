@@ -63,7 +63,7 @@ with open(r'xwordlist.dict', 'r') as fid:
                 beginnings.add(w1)
                 ends.add(w2)
 
-#%%
+#%% Create needed dictionaries
 prev_word_count = 1e6
 new_word_count = 0
 good_words = all_words.copy()
@@ -113,20 +113,7 @@ print(len(good_words))
 
     
 
-#%%
-forward_words = []
-backward_words = []
-
-forward_words = ['REDLOBSTER']
-backward_words = ['BOLDER']
-
-#forward_words = '''GARDENING ROBROY AMINOR OMEGA TOOFAR AGAINST OPEDPAGE DARTED ISAIDNO IBET'''.split(' ')
-#backward_words = '''BIONDI ASIDE TRADEGAP DEPOTS NIAGARA FOOTAGE MORONI MAYOR BORGNINE DRAG'''.split(' ')
-
-forward_word = forward_words[-1]
-backward_word = backward_words[0]
-new_len = len(''.join(forward_words)) - len(''.join(backward_words))
-end_string = forward_word[-new_len:][::-1]
+#%% Functions for the main loop
 
 def new_word_options(forward_words, backward_words):
     this_word = forward_words[-1]
@@ -158,6 +145,17 @@ def remove_last_word(forward_words, backward_words):
     pass
 
 #%% The main loop
+
+forward_words = []
+backward_words = []
+
+forward_words = ['REDLOBSTER']
+backward_words = ['BOLDER']
+
+#forward_words = '''GARDENING ROBROY AMINOR OMEGA TOOFAR AGAINST OPEDPAGE DARTED ISAIDNO IBET'''.split(' ')
+#backward_words = '''BIONDI ASIDE TRADEGAP DEPOTS NIAGARA FOOTAGE MORONI MAYOR BORGNINE DRAG'''.split(' ')
+
+
 while True:
     print(new_word_options(forward_words, backward_words))
     _input = input().strip().upper().split(',')
