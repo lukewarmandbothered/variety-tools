@@ -12,9 +12,9 @@ import itertools
 # The smallest length for words in the spiral
 MIN_WORD_LENGTH = 4
 # The minimum overlap of words
-MIN_OVERLAP = 2
+MIN_OVERLAP = 1
 # Minimum score of word list entries
-MIN_SCORE = 70
+MIN_SCORE = 75
 
 # Initial pass through word list
 all_words = set()
@@ -146,24 +146,28 @@ def remove_last_word(forward_words, backward_words):
 
 #%% The main loop
 
-forward_words = []
-backward_words = []
+#forward_words = []
+#backward_words = []
 
-forward_words = ['REDLOBSTER']
-backward_words = ['BOLDER']
+forward_words = ['KNISH', 'SILO', 'PACE', 'BIRTH', 'TOME', 'HEBREW', 'SNAREDRUMS', 'REGAL', 'LIVER', 'OMIT', 'LABEL', 'LIVER', 'BILLED', 'NEMO', 'NEPAL', 'AJAR', 'AGAINST']
+
+backward_words = ['NIAGARA', 'JALAPENO', 'MENDEL', 'LIBREVILLE', 'BALTIMORE', 'VILLAGERS', 'ANSWER', 'MURDER', 'BEHEMOTH', 'TRIBECA', 'POLISH', 'SINK']
+
 
 #forward_words = '''GARDENING ROBROY AMINOR OMEGA TOOFAR AGAINST OPEDPAGE DARTED ISAIDNO IBET'''.split(' ')
 #backward_words = '''BIONDI ASIDE TRADEGAP DEPOTS NIAGARA FOOTAGE MORONI MAYOR BORGNINE DRAG'''.split(' ')
 
 
 while True:
-    print(new_word_options(forward_words, backward_words))
+    nwo = new_word_options(forward_words, backward_words)
+    nwo = sorted(nwo, key=lambda x:x[0])
+    print(nwo)
     _input = input().strip().upper().split(',')
     if len(_input) == 1:
         _input = [_input[0], None]
     forward_words, backward_words = add_word(forward_words, backward_words, _input)
     
-    print(' '.join(forward_words))
-    print(' '.join(backward_words))
+    print('forward_words = ' + str(forward_words))
+    print('backward_words = ' + str(backward_words))
     print(len(''.join(forward_words)))
     
