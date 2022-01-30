@@ -88,13 +88,13 @@ while new_word_count < prev_word_count:
     #prev_word_count = len(good_words)
     #new_word_count = len(gw)
     good_words = gw.copy()
-    
+
     prev_word_count = len(beginnings)
     beginnings = set(begin_dict.keys())
     ends = set(end_dict.keys())
     new_word_count = len(beginnings)
-    
-    
+
+
 print(len(good_words))
 
 # Now add any words that have a hidden word in them
@@ -108,14 +108,15 @@ for word in all_words:
             begin_dict[w1] = begin_dict.get(w1, set()).union([this_word])
             end_dict[w2] = end_dict.get(w2, set()).union([this_word])
             good_words.add(word)
-            
+
 print(len(good_words))
 
-    
+
 
 #%% Functions for the main loop
 
 def new_word_options(forward_words, backward_words):
+    used_words = set(forward_words + backward_words)
     this_word = forward_words[-1]
     new_len = len(''.join(forward_words)) - len(''.join(backward_words))
     this_dict = end_dict
@@ -126,7 +127,17 @@ def new_word_options(forward_words, backward_words):
         this_str = this_word[:new_len][::-1]
     else:
         this_str = this_word[-new_len:][::-1]
-    return this_dict[this_str]
+    ret = this_dict[this_str]
+    ret2 = []
+    # remove anything that's already been used
+    for r in ret:
+        good_word = True
+        for w in r:
+            if w in used_words:
+                good_word = False
+        if good_word:
+            ret2.append(r)
+    return ret2
 
 def add_word(forward_words, backward_words, this_word):
     new_len = len(''.join(forward_words)) - len(''.join(backward_words))
@@ -146,17 +157,8 @@ def remove_last_word(forward_words, backward_words):
 
 #%% The main loop
 
-#forward_words = []
-#backward_words = []
-
-forward_words = ['KNISH', 'SILO', 'PACE', 'BIRTH', 'TOME', 'HEBREW', 'SNAREDRUMS', 'REGAL', 'LIVER', 'OMIT', 'LABEL', 'LIVER', 'BILLED', 'NEMO', 'NEPAL', 'AJAR', 'AGAINST']
-
-backward_words = ['NIAGARA', 'JALAPENO', 'MENDEL', 'LIBREVILLE', 'BALTIMORE', 'VILLAGERS', 'ANSWER', 'MURDER', 'BEHEMOTH', 'TRIBECA', 'POLISH', 'SINK']
-
-
-#forward_words = '''GARDENING ROBROY AMINOR OMEGA TOOFAR AGAINST OPEDPAGE DARTED ISAIDNO IBET'''.split(' ')
-#backward_words = '''BIONDI ASIDE TRADEGAP DEPOTS NIAGARA FOOTAGE MORONI MAYOR BORGNINE DRAG'''.split(' ')
-
+forward_words = ['SENEGAL']
+backward_words = ['GENES']
 
 while True:
     nwo = new_word_options(forward_words, backward_words)
@@ -166,8 +168,7 @@ while True:
     if len(_input) == 1:
         _input = [_input[0], None]
     forward_words, backward_words = add_word(forward_words, backward_words, _input)
-    
+
     print('forward_words = ' + str(forward_words))
     print('backward_words = ' + str(backward_words))
     print(len(''.join(forward_words)))
-    
