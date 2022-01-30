@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spiral Construction</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+  <style>
+  textarea.resultarea {
+    height: 150px;
+  }
+  </style>
+
+  <!-- Read in the JSON file -->
+  <script type="text/javascript">
+  fetch("./helper_dict.json")
+    .then(response => {
+     return response.json();
+    })
+    .then(spiralData => window.spiralData = spiralData);
+  </script>
+  <script src="spiral.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Spiral Construction</h2>
+    <div class="six columns">
+
+    </div>
+    <div class="three columns">
+      <label for="inwardWords">Inward</label>
+      <textarea class="u-full-width" placeholder="SENEGAL" id="inwardWords"></textarea>
+    </div>
+    <div class="three columns">
+      <label for="outwardWords">Outward</label>
+      <textarea class="u-full-width" placeholder="GENES" id="outwardWords"></textarea>
+    </div>
+  </div>
+</body>
+</html>
