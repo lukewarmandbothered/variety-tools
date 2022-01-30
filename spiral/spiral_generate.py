@@ -8,6 +8,7 @@ Created on Fri Jan 14 14:21:10 2022
 @author: Alex Boisvert
 """
 import itertools
+import json
 
 # The smallest length for words in the spiral
 MIN_WORD_LENGTH = 4
@@ -15,11 +16,6 @@ MIN_WORD_LENGTH = 4
 MIN_OVERLAP = 1
 # Minimum score of word list entries
 MIN_SCORE = 75
-
-# Initial pass through word list
-all_words = set()
-beginnings = set()
-ends = set()
 
 #%% Helper functions
 
@@ -51,12 +47,18 @@ def allPartitions(s, num=None):
 
 
 #%% Read in word list
+all_words = set()
+beginnings = set()
+ends = set()
+all_word_dict = dict()
+
 with open(r'xwordlist.dict', 'r') as fid:
     for line in fid:
         word, score = line.split(';')
         score = int(score)
         if score >= MIN_SCORE and len(word) >= MIN_WORD_LENGTH:
             all_words.add(word)
+            all_word_dict[word] = score
             # Partition the word to take the beginning and end parts
             for n in range(MIN_OVERLAP, len(word) - MIN_OVERLAP + 1):
                 w1, w2 = word[:n], word[n:]
@@ -111,32 +113,61 @@ for word in all_words:
 
 print(len(good_words))
 
+#%% Make one global dictionary from this and serialize into JSON format
+
+# The default word score (mostly for missing words)
+DEF_WORD_SCORE = 70
+
+helper_dict = dict()
+items = {'begin': begin_dict, 'end': end_dict}
+for name, d in items.items():
+    helper_dict[name] = dict()
+    for _str, this_set in d.items():
+        helper_dict[name][_str] = []
+        for this_word in this_set:
+            w0, w1 = this_word
+            score = all_word_dict.get(w0, DEF_WORD_SCORE) + all_word_dict.get(w1, DEF_WORD_SCORE)
+            leftover_len = len(w0) - len(_str)
+            if w1 is not None:
+                leftover_len -= len(w1)
+            if name == 'begin':
+                leftover = w0[-leftover_len:][::-1]
+            else:
+                leftover = w0[:leftover_len][::-1]
+            d2 = {'words': [w0, w1], 'score': score, 'leftover': leftover}
+            helper_dict[name][_str].append(d2)
+            
 
 
 #%% Functions for the main loop
+
+# Number of results to show
+RESULT_WORDS = 20
 
 def new_word_options(forward_words, backward_words):
     used_words = set(forward_words + backward_words)
     this_word = forward_words[-1]
     new_len = len(''.join(forward_words)) - len(''.join(backward_words))
-    this_dict = end_dict
+    this_dict = helper_dict['end']
     if new_len < 0:
         this_word = backward_words[0]
         new_len = -1 * new_len
-        this_dict = begin_dict
+        this_dict = helper_dict['begin']
         this_str = this_word[:new_len][::-1]
     else:
         this_str = this_word[-new_len:][::-1]
     ret = this_dict[this_str]
     ret2 = []
     # remove anything that's already been used
-    for r in ret:
+    for r in sorted(ret, key=lambda x:x['score'], reverse=True):
         good_word = True
         for w in r:
             if w in used_words:
                 good_word = False
         if good_word:
             ret2.append(r)
+        if len(ret2) >= RESULT_WORDS:
+            return ret2
     return ret2
 
 def add_word(forward_words, backward_words, this_word):
@@ -162,8 +193,8 @@ backward_words = ['GENES']
 
 while True:
     nwo = new_word_options(forward_words, backward_words)
-    nwo = sorted(nwo, key=lambda x:x[0])
-    print(nwo)
+    for nw in nwo:
+        print(nw['words'], nw['leftover'])
     _input = input().strip().upper().split(',')
     if len(_input) == 1:
         _input = [_input[0], None]
