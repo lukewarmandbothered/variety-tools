@@ -136,7 +136,10 @@ for name, d in items.items():
                 leftover = w0[:leftover_len][::-1]
             d2 = {'words': [w0, w1], 'score': score, 'leftover': leftover}
             helper_dict[name][_str].append(d2)
-            
+
+# Write out this file for JavaScript purposes
+with open('helper_dict.json', 'w') as fid:
+    json.dump(helper_dict, fid)            
 
 
 #%% Functions for the main loop
