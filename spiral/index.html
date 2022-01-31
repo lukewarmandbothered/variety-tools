@@ -6,8 +6,11 @@
   <title>Spiral Construction</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
   <style>
-  textarea.resultarea {
+  textarea.wordsarea {
     height: 150px;
+  }
+  label.wordSelectorLabel {
+    margin: 0px;
   }
   </style>
 
@@ -25,17 +28,26 @@
 <body>
   <div class="container">
     <h2>Spiral Construction</h2>
-    <div class="six columns">
-
+    <div class="five columns">
+      <p id="possibles"></p>
     </div>
     <div class="three columns">
       <label for="inwardWords">Inward</label>
-      <textarea class="u-full-width" placeholder="SENEGAL" id="inwardWords"></textarea>
+      <textarea class="u-full-width wordsarea" id="inwardWords">SENEGAL</textarea>
     </div>
     <div class="three columns">
       <label for="outwardWords">Outward</label>
-      <textarea class="u-full-width" placeholder="GENES" id="outwardWords"></textarea>
+      <textarea class="u-full-width wordsarea" id="outwardWords">GENES</textarea>
+      <button class="button-primary" type="submit" value="Begin" onclick="processTextAreas()">Begin</button>
     </div>
   </div>
+
+  <script type="text/javascript">
+  function foo() {
+     alert("Submit button clicked!");
+     return true;
+  }
+  </script>
+
 </body>
 </html>
