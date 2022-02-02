@@ -113,5 +113,12 @@ function processSelectedItem() {
   document.getElementById('outwardWords').value = fb_words[1].join('\n');
   // Repeat the process
   processTextAreas();
+
+  // Change the inward and outward headers
+  var inwardLength = fb_words[0].join('').length;
+  document.getElementById('inwardHeader').innerHTML = `Inward (${inwardLength})`;
+  var outwardLength = fb_words[1].join('').length;
+  document.getElementById('outwardHeader').innerHTML = `Outward (${outwardLength})`;
+
   return true;
 }
