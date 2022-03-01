@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Snake Charmer Construction</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" />
+  <style>
+  textarea.wordsarea {
+    height: 150px;
+  }
+  label.wordSelectorLabel {
+    margin: 0px;
+  }
+  </style>
+
+  <!-- Read in the JSON file -->
+  <script type="text/javascript">
+  fetch("./helper_dict.json")
+    .then(response => {
+     return response.json();
+    })
+    .then(spiralData => window.spiralData = spiralData);
+  </script>
+  <script src="charmer.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Snake Charmer Construction</h2>
+    <p>To make a JPZ from your results, use the <a href="https://jpd236.github.io/kotwords/snake-charmer.html">Kotwords snake charmer tool</a>.
+    <div class="five columns">
+      <p id="possibles"></p>
+    </div>
+    <div class="three columns">
+      <label for="inwardWords" id="inwardHeader">Loop 1</label>
+      <textarea class="u-full-width wordsarea" id="inwardWords">INEVITABLE</textarea>
+    </div>
+    <div class="three columns">
+      <label for="outwardWords" id="outwardHeader">Loop 2</label>
+      <textarea class="u-full-width wordsarea" id="outwardWords">IN
+EVITA</textarea>
+      <button class="button-primary" type="submit" value="Begin" onclick="processTextAreas()">Begin</button>
+    </div>
+  </div>
+
+</body>
+</html>

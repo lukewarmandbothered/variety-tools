@@ -120,7 +120,7 @@ print(len(good_words))
 DEF_WORD_SCORE = 0.85 * MIN_SCORE
 
 helper_dict = dict()
-items = {'begin': begin_dict, 'end': end_dict}
+items = {'begin': begin_dict}
 for name, d in items.items():
     helper_dict[name] = dict()
     for _str, this_set in d.items():
