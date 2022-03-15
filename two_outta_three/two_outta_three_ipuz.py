@@ -32,7 +32,11 @@ for key, cluelist in clues.items():
         new_clue_arr.append(['', new_clue])
     new_clue_arr = sorted(new_clue_arr, key=lambda x: x[1])
     clues[key] = new_clue_arr
+    
+# Also write the "notes" part to be the "intro" part
+if puz['intro']:
+    puz['notes'] = puz['intro']
 
 #%% Write the file
 with open(filename, 'w') as fid:
-    json.dump(puz, fid)
+    json.dump(puz, fid, indent=2)
