@@ -17,7 +17,7 @@ MIN_OVERLAP = 2
 # Minimum score of word list entries
 MIN_SCORE = 50
 # The word list to use
-WORDLIST = 'stwl.txt'
+WORDLIST = 'spreadthewordlist.dict'
 
 # %% Helper functions
 
@@ -111,6 +111,8 @@ for word in all_words:
             begin_dict[w1] = begin_dict.get(w1, set()).union([this_word])
             end_dict[w2] = end_dict.get(w2, set()).union([this_word])
             good_words.add(word)
+            if len(w_m) == 5:
+                print(word, w_m)
 
 print(len(good_words))
 

@@ -9,6 +9,7 @@ Create tools to help with creating "Two Outta Three Ain't Bad" puzzles
 import nprcommontools as nct
 import rhyme
 import json
+import math
 
 words = dict()
 MIN_SCORE = 80
@@ -97,11 +98,12 @@ for word in word_set:
                 rhymes.remove(r)
         num_rhymes = len(rhymes)
         if int(num_anagrams > 0) + int(num_synonyms > 0) + int(num_rhymes > 0) >= 2:
-            score = words[word]
+            score = 70
+            # We prioritize rhyme / anagram pairs
             if num_anagrams > 0:
-                score += 5
+                score += 15
             if num_rhymes > 0:
-                score += 1
+                score += 10
             if num_synonyms > 0:
                 score += 2
             good_words[word] = {'score': score, 'rhymes': list(rhymes), 'anagrams': anagrams, 'synonyms': list(synonyms)}
@@ -113,3 +115,7 @@ with open('two_outta_three.dict', 'w') as fid:
         
 with open('two_outta_three.json', 'w') as fid:
     json.dump(good_words, fid)
+    
+#%% Read in good_words
+with open('two_outta_three.json', 'r') as fid:
+    good_words = json.load(fid)
