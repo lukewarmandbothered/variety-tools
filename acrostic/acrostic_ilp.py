@@ -262,10 +262,10 @@ def create_acrostic(quote, source, excluded_words=[], wordlist=WORDLIST, min_sco
     # Set up our constraints
     # First: the constraint on the letter count
     logging.info('Setting up constraints')
-    for letter in string.ascii_lowercase:
+    for letter in quote_counter.keys():
         m += mip.xsum(letter_count(words[i], letter) * words_var[i] for i in range(NUM_WORDS)) == b[letter]
     # Second: constraint on the first letters
-    for letter in string.ascii_lowercase:
+    for letter in source_counter.keys():
         m += mip.xsum(int(words[i].startswith(letter)) * words_var[i] for i in range(NUM_WORDS)) == b[f'_{letter}']
 
     # Optional objective: all words approximately the same length
@@ -273,7 +273,8 @@ def create_acrostic(quote, source, excluded_words=[], wordlist=WORDLIST, min_sco
 
     # Run the optimization.  This is the potential bottleneck.
     logging.info('Optimizing')
-    m.optimize()
+    #m.max_solutions = 1
+    m.optimize(max_solutions=1)
 
     #logging.info(m.num_solutions)
 
