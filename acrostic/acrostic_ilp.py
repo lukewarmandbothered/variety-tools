@@ -18,7 +18,7 @@ MIN_SCORE = 90
 MIN_WORD_LENGTH = 4
 
 # The "distance" around the mean length we look at
-LEN_DISTANCE = 4
+LEN_DISTANCE = 3
 
 ###################
 # Add the directory to the wordlist
@@ -219,6 +219,11 @@ def create_acrostic(quote, source, excluded_words=[], wordlist=WORDLIST, min_sco
     # Normalize the inputs
     source_alpha = alpha_only(source.strip())
     quote_alpha = alpha_only(quote)
+    
+    # Keep track of the non-first letters
+    non_first_letters = quote_alpha
+    for let in source_alpha:
+        non_first_letters = non_first_letters.replace(let, '', 1)
 
     # Set up our letter constraint targets
     logging.info('Setting up constraint targets')
@@ -251,13 +256,14 @@ def create_acrostic(quote, source, excluded_words=[], wordlist=WORDLIST, min_sco
             if int(score) >= min_score and len(word) >= MIN_WORD_LENGTH \
                 and len(word) >= min_length \
                 and len(word) <= max_length \
-                and word[0] in source_letters and is_substring(word, quote_alpha) \
+                and word[0] in source_letters and is_substring(word[1:], non_first_letters) \
                 and word not in excluded_words_set:
                 # Create a variable from this word
                 words_var.append(m.add_var(name=word, var_type=mip.BINARY))
                 words.append(word)
 
     NUM_WORDS = len(words)
+    logging.info(f'Proceeding with {NUM_WORDS} words')
 
     # Set up our constraints
     # First: the constraint on the letter count
