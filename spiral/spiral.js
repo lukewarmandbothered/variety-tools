@@ -5,7 +5,7 @@ function reverseString(str) {
 
 function new_word_options(forward_words, backward_words) {
   // The maximum number of words to return
-  MAX_RET_WORDS = 15;
+  MAX_RET_WORDS = 20;
   // Find the words we've already used
   var used_words = new Set(forward_words.concat(backward_words));
   // Get the last word
