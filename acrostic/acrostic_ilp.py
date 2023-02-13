@@ -168,6 +168,12 @@ def create_acrostic2(quote, source, excluded_words=[], included_words=[], wordli
 
     # Make sure we are only including actual words
     included_words = [x for x in included_words if x]
+    
+    # Ensure the "source" is in the quote
+    s1 = alpha_only(source)
+    s2 = alpha_only(quote)
+    assert is_substring(s1, s2)
+    
 
     if included_words:
         # Take the letters from the words we're including
