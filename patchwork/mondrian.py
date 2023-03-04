@@ -202,15 +202,15 @@ for y1 in range(height):
             thisColor = colors[0]
         if arr1Num in []: # blue
             thisColor = colors[1]
-        if arr1Num in [7]: # white
+        if arr1Num in [7,8]: # white
             thisColor = colors[2]
         if arr1Num in []: # yellow
             thisColor = colors[3]
         style = {'color': thisColor}
         bar_string = ''
-        if y < side_length-1 and (y+1, x) not in arr2_words[arr2Num]:
+        if y < height-1 and (y+1, x) not in arr2_words[arr2Num]:
             bar_string += 'B'
-        if x < side_length-1 and (y, x+1) not in arr2_words[arr2Num]:
+        if x < width-1 and (y, x+1) not in arr2_words[arr2Num]:
             bar_string += 'R'
         if bar_string:
             style['barred'] = bar_string
