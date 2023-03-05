@@ -25,13 +25,13 @@ arr1 = np.array([[1, 1, 1, 2, 2, 2, 2],
 arr2 = np.array([[1, 1, 2, 2, 3, 3, 3],
                 [1, 1, 2, 2, 3, 3, 3],
                 [1, 1, 2, 2, 3, 3, 3],
-                [4, 4, 4, 5, 5, 6, 6],
-                [4, 4, 4, 5, 5, 6, 6],
-                [7, 7, 7, 5, 5, 8, 9],
-                [7, 7, 7, 10, 10, 8, 9],
-                [11, 11, 11, 10, 10, 8, 9],
-                [11, 11, 11, 10, 10, 8, 9],
-                [11, 11, 11, 10, 10, 8, 9]])
+                [4, 4, 4, 5, 5, 10, 10],
+                [4, 4, 4, 5, 5, 10, 10],
+                [6, 6, 6, 5, 5, 10, 10],
+                [6, 6, 6, 8, 8, 7, 7],
+                [9, 9, 9, 8, 8, 7, 7],
+                [9, 9, 9, 8, 8, 7, 7],
+                [11, 11, 11, 11, 11, 11, 11]])
 
 height, width = arr1.shape
 assert arr1.shape == arr2.shape
@@ -88,50 +88,51 @@ for k in sorted(arr2_words.keys()):
 #%% Convert to iPuz
 # Paste the output from Qxw here
 qxd_output = '''
-W0 SPIRIT
-# spirit
-W1 NATTIEST
-# nattiest
-W2 TEETHE
-# teethe
-W3 MESCAL
-# mescal
-W4 TRIPE
-# tripe
-W5 OUNCE
-# ounce
-W6 DISHONEST
-# dishonest
-W7 ALGAE
-# algae
-W8 SERTA
-# serta
-W9 EASTLA
-# eastla
-W10 REDSTATER
-# redstater
-W11 SPRITE
-# sprite
-W12 INTIME
-# intime
-W13 ATTESTSTO
-# atteststo
-W14 ETCHED
-# etched
-W15 ALISON
-# alison
+W0 OUSTER
+# ouster
+W1 PRENATAL
+# prenatal
+W2 ATTACH
+# attach
+W3 INCISE
+# incise
+W4 ARIEL
+# ariel
+W5 RUNAT
+# runat
+W6 INTRINSIC
+# intrinsic
+W7 DEBRA
+# debra
+W8 USAID
+# usaid
+W9 RACHEL
+# rachel
+W10 NOTEPAPER
+# notepaper
+W11 OUTEAT
+# outeat
+W12 SPRAIN
+# sprain
+W13 RENTALCAR
+# rentalcar
+W14 TAICHI
+# taichi
+W15 SENTIN
+# sentin
 W16 RUIN
 # ruin
-W17 ASHLEE
-# ashlee
-W18 PEETE
-# peete
-W19 CEDAR
-# cedar
-W20 STARTSAT
-# startsat
-W21 GREATSEAL
-# greatseal
+W17 DURESS
+# duress
+W18 ELOPE
+# elope
+W19 ATTAR
+# attar
+W20 ICANHELP
+# icanhelp
+W21 BARRICADE
+# barricade
+
 '''
 # Get the mapping of index to letter
 qxd_letters = dict()
