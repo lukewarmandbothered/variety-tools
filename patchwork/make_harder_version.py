@@ -17,7 +17,7 @@ def alpha_only(s):
     return re.sub(r'[^A-Za-z]+', '', s.lower())
 
 # Read in the file
-file_loc = r'C:/Users/boisv/Downloads/patchwork_quilt.ipuz'
+file_loc = r'C:/Users/boisv/Documents/malibutri/2023/Mondrian_hard.ipuz'
 puz = pypuz.Puzzle().fromIPuz(file_loc)
 
 # Whether to make this puzzle for Squares
@@ -34,7 +34,7 @@ for clue_set in puz.clues:
         sorted_clues = [first_clue] + sorted_clues
     d['clues'] = sorted_clues
     for c in d['clues']:
-        c.cells = []
+        #c.cells = []
         c.number = ''
     clues2.append(d)
     
