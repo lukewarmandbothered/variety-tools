@@ -225,12 +225,14 @@ clues = [{'title': 'Colors', 'clues': []}, {'title': 'Patches', 'clues': []}]
 for k, v in arr1_words.items():
     thisNum = word2Num[(1, k)]
     cells = [(cell[1], cell[0]) for cell in v]
-    clues[0]['clues'].append({'number': thisNum, 'clue': 'TBD', 'cells': cells})
+    clue = ''.join([qxd_letters[_] for _ in v])
+    clues[0]['clues'].append({'number': thisNum, 'clue': clue, 'cells': cells})
     
 for k, v in arr2_words.items():
     thisNum = word2Num[(2, k)]
     cells = [(cell[1], cell[0]) for cell in v]
-    clues[1]['clues'].append({'number': thisNum, 'clue': 'TBD', 'cells': cells})
+    clue = ''.join([qxd_letters[_] for _ in v])
+    clues[1]['clues'].append({'number': thisNum, 'clue': clue, 'cells': cells})
 
 pypuz_input['clues'] = clues
 
