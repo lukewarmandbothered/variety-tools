@@ -152,7 +152,7 @@ for line in qxd_output.split('\n'):
 
 pypuz_input = {}
 
-NOTES = "Answers in this puzzle are entered in the irregularly shaped areas, either delineated by colors or by bars. Answers are entered left to right, row by row within each piece."
+NOTES = "Answers in this puzzle are entered in the rectangular areas, either delineated by colors or by bars. Answers are entered left to right, row by row within each piece."
 
 pypuz_input['metadata'] = {
       'kind': 'crossword'
@@ -199,11 +199,11 @@ for y1 in range(height):
         # color and bars
         thisColor = colors[arr1Num % len(colors)]
         # Change colors as needed
-        if arr1Num in [6,10]: # red
+        if arr1Num in []: # red
             thisColor = colors[0]
         if arr1Num in []: # blue
             thisColor = colors[1]
-        if arr1Num in [7,8]: # white
+        if arr1Num in []: # white
             thisColor = colors[2]
         if arr1Num in []: # yellow
             thisColor = colors[3]
