@@ -17,11 +17,11 @@ def alpha_only(s):
     return re.sub(r'[^A-Za-z]+', '', s.lower())
 
 # Read in the file
-file_loc = r'C:/Users/boisv/Documents/malibutri/2023/Mondrian.jpz'
-puz = pypuz.Puzzle().fromJPZ(file_loc)
+file_loc = r'Composition_RBY.ipuz'
+puz = pypuz.Puzzle().fromIPuz(file_loc)
 
 # Whether to make this puzzle for Squares
-FOR_SQUARES = False
+FOR_SQUARES = True
 
 clues2 = []
 for clue_set in puz.clues:
