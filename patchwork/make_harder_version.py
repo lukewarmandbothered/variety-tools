@@ -12,6 +12,7 @@ NOTE: you'll need to add "fakeclues" manually
 
 import pypuz
 import re
+import json
 
 def alpha_only(s):
     return re.sub(r'[^A-Za-z]+', '', s.lower())
@@ -21,7 +22,7 @@ file_loc = r'Composition_RBY.ipuz'
 puz = pypuz.Puzzle().fromIPuz(file_loc)
 
 # Whether to make this puzzle for Squares
-FOR_SQUARES = True
+FOR_SQUARES = False
 
 clues2 = []
 for clue_set in puz.clues:
@@ -39,9 +40,17 @@ for clue_set in puz.clues:
     clues2.append(d)
     
 puz.clues = clues2
+
+puz.metadata.notes = puz.metadata.notes.strip() + ' Clues are given in alphabetical order.'
     
 if FOR_SQUARES:
     outfile = 'patchwork_quilt_hard_squares.ipuz'
+    puz.toIPuz(outfile)
+    with open(outfile, encoding='utf-8') as fid:
+        j = json.load(fid)
+        j['fakeclues'] = True
+    with open(outfile, 'w', encoding='utf-8') as fid:
+        json.dump(j, fid)
 else:
     outfile = 'patchwork_quilt_hard.ipuz'
-puz.toIPuz(outfile)
+    puz.toIPuz(outfile)
