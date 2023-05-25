@@ -51,6 +51,7 @@ alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 # loop through the words and find matching positions 
 # keep track of positions of all the letters
+# TODO: this doesn't always work. Just keep trying until it does?
 letter_positions = dict()
 for i, w in enumerate(words):
     this_word_letter = alphabet[i]
