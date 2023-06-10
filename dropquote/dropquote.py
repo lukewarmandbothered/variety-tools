@@ -6,7 +6,7 @@ Created on Mon Jun  5 20:39:20 2023
 """
 import re
 
-def make_dropquote_jpz(quote, width, height, metadata={}):
+def make_dropquote_jpz(quote, width, metadata={}):
     # break up the quote into chunks of length `width`
     q1 = quote.upper()
     q_arr, q_arr2 = [], []
@@ -19,6 +19,8 @@ def make_dropquote_jpz(quote, width, height, metadata={}):
     q_arr2 = list(zip(*q_arr2))
     q_arr3 = [sorted(_) for _ in q_arr2]
     q_arr4 = list(zip(*q_arr3))
+    
+    height = len(q_arr4)
     
     # now make the JPZ, I guess
     title = metadata.get('title', 'TITLE')
@@ -43,7 +45,7 @@ def make_dropquote_jpz(quote, width, height, metadata={}):
             <copyright>{cpr}</copyright>
             <description>In a dropquote, you must reveal the quote hidden in the white squares. Above each column are a series of letters; you "drop" each letter into the appropriate squares in each row and column to reveal the quote. Use logic and letter patterns to determine which letter goes where.</description>
         </metadata>
-        <acrostic>
+        <crossword>
             <grid width="{width}" height="{2*height}">
                 <grid-look numbering-scheme="normal"/>
     '''
@@ -90,7 +92,7 @@ def make_dropquote_jpz(quote, width, height, metadata={}):
                 <clue word="1" number="">[QUOTE]</clue>
             </clues>
     
-        </acrostic>
+        </crossword>
     </rectangular-puzzle>
 </crossword-compiler-applet>
     '''
@@ -105,9 +107,8 @@ metadata = {"author": "Alex Boisvert",
 
 quote = 'If Barbie is so popular, why do you have to buy her friends?'
 width = 12
-height = 5
 
-jpz = make_dropquote_jpz(quote, width, height, metadata)
+jpz = make_dropquote_jpz(quote, width, metadata)
 
     
     
