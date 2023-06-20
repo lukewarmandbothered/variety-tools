@@ -14,7 +14,7 @@ def make_dropquote_jpz(quote, width, metadata={}):
         q, q1 = q1[:width], q1[width:]
         q = q + ' ' * (width - len(q))
         q_arr.append(list(q))
-        q_arr2.append(list(re.sub(r'[^A-Z]+', ' ', q)))
+        q_arr2.append(list(re.sub(r'[^A-Z]', ' ', q)))
     # re-shape for the letters above
     q_arr2 = list(zip(*q_arr2))
     q_arr3 = [sorted(_) for _ in q_arr2]
@@ -26,6 +26,11 @@ def make_dropquote_jpz(quote, width, metadata={}):
     title = metadata.get('title', 'TITLE')
     author = metadata.get('author', 'AUTHOR')
     cpr = metadata.get('copyright', '©')
+    
+    clue = "[QUOTE]"
+    if metadata.get('quote-author'):
+        clue = "Quote by " + metadata.get('quote-author')
+    
     jpz = f'''<?xml version="1.0" encoding="UTF-8"?>
 <crossword-compiler-applet xmlns="http://crossword.info/xml/crossword-compiler-applet">
     <applet-settings cursor-color="#00b100" selected-cells-color="#80ff80" show-alphabet="true">
@@ -84,12 +89,12 @@ def make_dropquote_jpz(quote, width, metadata={}):
     jpz += '''            </word>\n'''
     
     # There's only one clue
-    jpz += '''
+    jpz += f'''
             <clues>
                 <title>
                     <b>Clues</b>
                 </title>
-                <clue word="1" number="">[QUOTE]</clue>
+                <clue word="1" number="">{clue}</clue>
             </clues>
     
         </crossword>
@@ -102,7 +107,8 @@ def make_dropquote_jpz(quote, width, metadata={}):
 #%%
 metadata = {"author": "Alex Boisvert",
             "title": "Pretty in Pink",
-            "copyright": "© 2023 Crossword Nexus. CC BY 4.0 License."
+            "copyright": "© 2023 Crossword Nexus. CC BY 4.0 License.",
+            "quote-author": "Steven Wright"
             }
 
 quote = 'If Barbie is so popular, why do you have to buy her friends?'
