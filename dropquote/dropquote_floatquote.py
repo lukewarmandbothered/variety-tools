@@ -8,12 +8,7 @@ import re
 import random
 import math
 
-DESCRIPTION = '''This puzzle has two quotations, 
-and letters can drop down from above or float down from below. 
-Letters at the top will drop down into the upper grid, 
-and letters at the bottom will float down into the lower grid. 
-Letters in the middle may go up or down; you must figure out 
-which are which.'''
+DESCRIPTION = '''This puzzle has two quotations, and letters can drop down from above or float up from below. Letters at the top will drop down into the upper grid, and letters at the bottom will float down into the lower grid. Letters in the middle may go up or down; you must figure out which are which.'''
 
 def quote_to_arrays(quote):
     """
@@ -234,8 +229,4 @@ quote2 = """If it doesn’t matter who wins or loses, then why do they keep scor
 width = 14
 
 jpz = make_dropquote_jpz(quote1, quote2, width, metadata)
-
-    
-    
-                
     
