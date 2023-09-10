@@ -136,6 +136,8 @@ def make_dropquote_jpz(q1, q2, width, metadata={}):
             elif let == ' ':
                 jpz += f'''                <cell x="{x}" y="{y}" type="block" />\n'''
             else:
+                if let == '"':
+                    let = "&quot;"
                 jpz += f'''                <cell x="{x}" y="{y}" solution="{let}" type="clue" solve-state="{let}" />\n'''
     y0 += len(grid_arr1)
     
@@ -164,6 +166,8 @@ def make_dropquote_jpz(q1, q2, width, metadata={}):
             elif let == ' ':
                 jpz += f'''                <cell x="{x}" y="{y}" type="block" />\n'''
             else:
+                if let == '"':
+                    let = "&quot;"
                 jpz += f'''                <cell x="{x}" y="{y}" solution="{let}" type="clue" solve-state="{let}" />\n'''
     y0 += len(grid_arr2)
     
