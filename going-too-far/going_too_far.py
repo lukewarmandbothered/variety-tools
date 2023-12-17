@@ -18,6 +18,7 @@ pz = pypuz.Puzzle().fromIPuz(FILENAME)
 # 2. Turn all circles to gray squares
 # 3. Remove all circled letters from their word
 # 4. Re-number
+# 5. Re-sort clues
 
 # Step 1: remove bars
 # Also step 2: turn circled squares gray
@@ -75,6 +76,10 @@ for y in range(pz.grid.height):
             number += 1
     #END for x
 #END for y
+
+# 5. Re-sort clues
+for clue_set in pz.clues:
+    clue_set['clues'] = sorted(clue_set['clues'], key=lambda x: int(x.number))
 
 # Write the file
 file1 = FILENAME.split('.')[0]
