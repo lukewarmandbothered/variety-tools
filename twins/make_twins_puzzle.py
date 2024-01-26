@@ -14,13 +14,13 @@ def alpha_only(s):
     return re.sub(r'[^A-Za-z]+', '', s)
 
 # Set up the files we want to read in
-pz1_file = r'C:/Users/boisv/Desktop/puz1.ipuz'
-pz2_file = r'C:/Users/boisv/Desktop/puz2.ipuz'
+pz1_file = r'C:/Users/boisv/Desktop/puz1.puz'
+pz2_file = r'C:/Users/boisv/Desktop/puz2.puz'
 
 # Make PyPuz objects
 # Note: change `fromPuz` if loading a different file type
-pz1 = pypuz.Puzzle().fromIPuz(pz1_file)
-pz2 = pypuz.Puzzle().fromIPuz(pz2_file)
+pz1 = pypuz.Puzzle().fromPuz(pz1_file)
+pz2 = pypuz.Puzzle().fromPuz(pz2_file)
 
 # Get the width and height
 width = pz2.metadata.width
@@ -39,7 +39,7 @@ for y in range(height):
         cell2 = copy.deepcopy(pz2.grid.cellAt(x, y))
         # Logic to show the first word in the grid
         if first_entry:
-            if y > 1:
+            if y > 0:
                 first_entry = False
             elif cell1.isBlock or cell1.isEmpty:
                 first_entry = False
