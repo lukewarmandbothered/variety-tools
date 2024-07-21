@@ -37,7 +37,9 @@
   </form>
 </div>
 
-<div id="test"></div>
+<div id="svg"></div>
+
+<button id="saveBtn">Save as PNG</button>
 
 <script type="text/javascript">
 // Get the form and change log container
@@ -59,7 +61,7 @@ function processChange(event) {
 
     var r = create_flower_power_svg(petals, word_length, petal_thickness, gravity, font_size, number_margin);
     //console.log(r);
-    document.getElementById('test').innerHTML = r;
+    document.getElementById('svg').innerHTML = r;
 
 }
 
@@ -67,6 +69,35 @@ form.addEventListener('input', processChange);
 form.addEventListener('change', processChange);
 
 processChange(0);
+
+// Save as PNG functionality
+document.getElementById('saveBtn').addEventListener('click', function() {
+    const svg = document.getElementById('svgElement');
+    const svgData = new XMLSerializer().serializeToString(svg);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.setAttribute('src', 'data:image/svg+xml;base64,' + btoa(svgData));
+
+    img.onload = function() {
+        canvas.width = svg.clientWidth;
+        canvas.height = svg.clientHeight;
+        ctx.drawImage(img, 0, 0);
+
+        const pngFile = canvas.toDataURL('image/png');
+
+        const a = document.createElement('a');
+        a.href = pngFile;
+        a.download = 'image.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+});
+
+
 </script>
 
 </BODY>

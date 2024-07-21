@@ -68,7 +68,7 @@ function create_flower_power_svg(petals, word_length, petal_thickness, gravity, 
   var _, a_x, a_y, b_x, b_y, border_end_x, border_end_y, border_left_x, border_left_y, border_outer_points, border_right_x, border_right_y, c_x, c_y, circle_limit_x, circle_limit_y, d_x, d_y, end_x, end_y, h, left_x, left_y, outer_points, path, radius, ret, right_x, right_y, x, y, z, z_inner;
 
   ret = "";
-  ret += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg width=\"" + (canvas_size + margin_size).toString() + "\" height=\"" + (canvas_size + margin_size).toString() + "\" viewBox=\"" + (-(canvas_size + margin_size) / 2).toString() + " " + (-(canvas_size + margin_size) / 2).toString() + " " + (canvas_size + margin_size).toString() + " " + (canvas_size + margin_size).toString() + "\" xmlns=\"http://www.w3.org/2000/svg\">\n";
+  ret += "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<svg id=\"svgElement\" width=\"" + (canvas_size + margin_size).toString() + "\" height=\"" + (canvas_size + margin_size).toString() + "\" viewBox=\"" + (-(canvas_size + margin_size) / 2).toString() + " " + (-(canvas_size + margin_size) / 2).toString() + " " + (canvas_size + margin_size).toString() + " " + (canvas_size + margin_size).toString() + "\" xmlns=\"http://www.w3.org/2000/svg\">\n";
   ret += "<style>text {font: " + font_size.toString() + "px sans-serif; text-anchor: middle; dominant-baseline: middle;}</style>";
   [end_x, end_y] = [0, -canvas_size / 2];
   [left_x, left_y] = [-petal_thickness * canvas_size / 200, -canvas_size / 4 + gravity];
@@ -92,14 +92,14 @@ function create_flower_power_svg(petals, word_length, petal_thickness, gravity, 
 
   z = calculate_z(0, 0, outer_points[4], outer_points[5], outer_points[2], outer_points[3], 0, 0, outer_points[6 * word_length], outer_points[6 * word_length + 1], outer_points[6 * word_length + 2], outer_points[6 * word_length + 3]);
   z_inner = calculate_z(0, 0, outer_points[4], outer_points[5], outer_points[2], outer_points[3], 0, 0, outer_points[6 * (word_length + 1)], outer_points[6 * (word_length + 1) + 1], outer_points[6 * (word_length + 1) + 2], outer_points[6 * (word_length + 1) + 3]);
-  
+
   // calculate the limits of the circle
   var i1 = petals + word_length;
   [_, _, _, _, circle_limit_x, circle_limit_y] = split_bezier_curve_first(0, 0, outer_points[6 * i1 + 4], outer_points[6 * i1 + 5], outer_points[6 * i1 + 2], outer_points[6 * i1 + 3], z_inner);
-  
+
   // calculate the radius of the circle
   radius = Math.sqrt(squared_dist(0, 0, circle_limit_x, circle_limit_y));
-  
+
   h = calculate_z(outer_points[2], outer_points[3], outer_points[4], outer_points[5], 0, 0, outer_points[6 + 2], outer_points[6 + 3], outer_points[6], outer_points[6 + 1], 0, 0);
   path = start(0, 0);
 
@@ -132,7 +132,7 @@ function create_flower_power_svg(petals, word_length, petal_thickness, gravity, 
 
   path = end(path, "black", "transparent", "5");
   ret += path + "\n";
-  
+
   ret += "<circle cx=\"0\" cy=\"0\" r=\"" + radius.toString() + "\" stroke=\"transparent\" fill=\"white\"/>\n";
   [x, y] = [outer_points[2], outer_points[3] + font_size + number_margin];
 
