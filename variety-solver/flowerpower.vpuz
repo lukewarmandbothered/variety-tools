@@ -7,7 +7,7 @@
   "solution-string": "AAAAAAAABBBBCCCCDDEEEEEEEEEEGHHIILLLMMMMNNNNNNOOOOOOOOOPRRRRRRRRRSSSSSSSTTTTTTTTTUUX",
 
   "clues": {
-    "Across": [
+    "Clockwise": [
         [
             "1",
             "Fruit that looks like a pear but tastes way worse"
@@ -65,7 +65,7 @@
             "Dvorak alternative"
         ]
     ],
-    "Down": [
+    "Counterclockwise": [
     [
         "1",
         "\"Scan me\" item"
