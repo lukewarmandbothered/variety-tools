@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossword Nexus Variety Solver</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="container">
+        <div id="puzzle-image-container">
+            <img id="puzzle-image" src="flowerpower.png" alt="Puzzle Image">
+            <canvas id="canvas"></canvas>
+            <div class="button-container">
+                <button class="info-button" id="infoButton">Show Puzzle Info</button>
+            </div>
+        </div>
+        <div id="clue-panels">
+            <div id="clues-0" class="clue-panel">
+                <h2 id="clues-0-title"></h2>
+                <ul class="clue-list" id="clue-list-0">
+                </ul>
+            </div>
+            <div id="clues-1" class="clue-panel">
+                <h2 id="clues-1-title"></h2>
+                <ul class="clue-list" id="clue-list-1">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Puzzle Information</h2>
+                <span class="modal-close" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-author"></p>
+                <p id="modal-copyright"></p>
+                <p id="modal-notepad"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
