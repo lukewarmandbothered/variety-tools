@@ -35,6 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
       const canvas = document.getElementById('canvas'); // Get the canvas element
       const ctx = canvas.getContext('2d'); // Get the 2D drawing context for the canvas
 
+      /** Define what to do when the image loads **/
+      img.onload = function() {
+        // Set canvas dimensions to match the image dimensions
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+
+        // Adjust the canvas size in the DOM to match the image
+        canvas.style.width = img.width + 'px';
+        canvas.style.height = img.height + 'px';
+      }
+
       /** Replace the HTML with data from the file **/
 
       // Puzzle image
@@ -83,14 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       let clickX, clickY; // Variables to store click coordinates
       const letters = []; // Array to store letters and their positions
-
-      // Set canvas dimensions to match the image dimensions
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-
-      // Adjust the canvas size in the DOM to match the image
-      canvas.style.width = img.width + 'px';
-      canvas.style.height = img.height + 'px';
 
       // Event listener for canvas clicks
       document.getElementById('canvas').addEventListener('click', function(event) {
