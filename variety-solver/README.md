@@ -16,3 +16,6 @@ To allow users to solve your puzzle, create a URL like https://your.site/variety
 ## Solving
 Solving using the variety solver is relatively intuitive. Click in the puzzle image to add a letter. Click on a letter and hit "delete" (or "backspace") to remove.
 
+## License
+This software is released under the MIT License.
+
