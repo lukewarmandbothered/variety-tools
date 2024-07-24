@@ -175,9 +175,60 @@ document.addEventListener('DOMContentLoaded', function() {
               drawLetter(letter.x, letter.y, letter.letter, push=false);
           });
         }
-      }
-    });
-});
+      } // end removeLetter
+
+      /** Dealing with clue note boxes **/
+      // Select all .clue-item elements
+      const items = document.querySelectorAll('.clue-item');
+
+      // Loop through each item and add event listeners
+      items.forEach(item => {
+         item.addEventListener('click', function() {
+             // Check if the input box already exists
+             let inputBox = item.querySelector('.input-box');
+
+             // If not, create the input box
+             if (!inputBox) {
+                 inputBox = document.createElement('input');
+                 inputBox.type = 'text';
+                 inputBox.className = 'input-box';
+
+                 // Add input event listener to the input box
+                 inputBox.addEventListener('input', function() {
+                     if (inputBox.value.trim() === '') {
+                         inputBox.style.display = 'none'; // Hide if input is empty
+                     } else {
+                         inputBox.style.display = 'block'; // Show if input is not empty
+                     }
+                 });
+
+                 // Add keydown event listener to the input box
+                 inputBox.addEventListener('keydown', function(event) {
+                     if (event.key === 'Enter') {
+                         inputBox.blur(); // Remove focus when Enter is pressed
+                     }
+                 });
+
+                 // Append the input box to the item
+                 item.appendChild(inputBox);
+             }
+
+             // Show and focus the input box when the item is clicked
+             inputBox.style.display = 'block';
+             inputBox.focus();
+         });
+
+         // Add blur event listener to hide the input box if it's empty
+         item.addEventListener('focusout', function(event) {
+             if (event.target.className === 'input-box' && event.target.value.trim() === '') {
+                 event.target.style.display = 'none';
+             }
+         });
+
+      });
+
+    }); // end fetch
+}); // end document ready
 
 /** Modal functionality **/
 
