@@ -70,6 +70,18 @@ ul.clue-list {
 /* Space between clues */
 li.clue-item {
     margin-bottom: 5px;
+    cursor: pointer;
+}
+
+li.clue-item:hover {
+    background-color: lightgray; /* Change background on hover */
+}
+
+/* Clue note text box */
+.input-box {
+    display: none;
+    margin-top: 5px;
+    font-weight: bold;
 }
 
 /* Bold the clue numbers */
