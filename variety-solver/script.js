@@ -325,7 +325,7 @@ function checkIfSolved(data, letters) {
   // Grab the solution string
   const solutionString = data['solution-string-sorted'];
 
-  // We don't need to go in if the letter counts are mismatched
+  // We don't need to go on if the letter counts are mismatched
   if (!solutionString || solutionString.length !== letters.length) {
     return;
   }
