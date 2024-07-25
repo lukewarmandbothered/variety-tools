@@ -58,13 +58,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       // Clues
-      /* TODO: we're living dangerously here and assuming exactly two clue arrays */
-      for (var i=0; i < 2; i++) {
-        // Fix the title
-        var titleId = "clues-" + i.toString() + "-title";
-        document.getElementById(titleId).innerHTML = data['improved-clues'][i].title;
-
-        // Fix the clues
+      var clueHTML = '';
+      for (var i=0; i < data['improved-clues'].length; i++) {
+        // Add a clue panel
+        clueHTML += `<div id="clues-${i}" class="clue-panel">\n`;
+        // Add a title
+        clueHTML += `  <h2 id="clues-${i}-title" class="clues-title">${data['improved-clues'][i].title}</h2>`;
+        // Add a clue list ul
+        clueHTML += `<ul class="clue-list" id="clue-list-${i}">`;
+        // Add the list elements
         var thisHTML = '';
         data['improved-clues'][i].clues.forEach(obj => {
           thisHTML += `
@@ -74,10 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
           if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
           thisHTML += "</li>\n";
         });
-        var clueListId = `clue-list-${i}`;
-        document.getElementById(clueListId).innerHTML = thisHTML;
+        clueHTML += thisHTML;
+        // Close all the tags
+        clueHTML += "</ul></div>\n";
       }
-
+      // Add this HTML to the DOM
+      document.getElementById("clue-panels").innerHTML = clueHTML;
 
       /** Now for the puzzle functionality **/
       // Create and style the overlay and circle elements
