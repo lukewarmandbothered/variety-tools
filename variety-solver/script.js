@@ -67,7 +67,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fix the clues
         var thisHTML = '';
         data['improved-clues'][i].clues.forEach(obj => {
-          thisHTML += `<li class="clue-item"><span class="clue-number">${obj.number}</span><span class="clue-text">${obj.text}</span></li>`;
+          thisHTML += `
+            <li class="clue-item">
+              <span class="clue-number">${obj.number}</span>
+              <span class="clue-text">${obj.text}</span>`;
+          if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
+          thisHTML += "</li>\n";
         });
         var clueListId = `clue-list-${i}`;
         document.getElementById(clueListId).innerHTML = thisHTML;
@@ -282,7 +287,7 @@ function readVpuz(data) {
     titles.forEach( function(title) {
         var thisClues = [];
         data['clues'][title].forEach( function (clue) {
-            var number = '', text = '';
+            var number = '', text = ''; explanation = null;
             // a "clue" can be an array or an object (or a string?)
             if (Array.isArray(clue)) {
                 number = clue[0].toString();
@@ -294,8 +299,11 @@ function readVpuz(data) {
                   number = clue.number.toString();
                 }
                 text = clue.clue;
+                explanation = clue.explanation;
             }
-            thisClues.push({'number': number, 'text': text});
+            var myObj = {'number': number, 'text': text};
+            if (explanation) myObj['explanation'] = explanation;
+            thisClues.push(myObj);
         });
         clues.push({'title': title.split(':').at(-1), 'clues': thisClues});
     });
@@ -317,7 +325,7 @@ function checkIfSolved(data, letters) {
   // Grab the solution string
   const solutionString = data['solution-string-sorted'];
 
-  // We don't need to go in if the letter counts are mismatched
+  // We don't need to go on if the letter counts are mismatched
   if (!solutionString || solutionString.length !== letters.length) {
     return;
   }
@@ -334,7 +342,12 @@ function checkIfSolved(data, letters) {
         confetti.stop()
     }, 3000);
 
-    // If, in addition, there's an "explanation", open a modal box and show it
+    // If there are clue explanations, show them
+    document.querySelectorAll('.clue-explanation').forEach(elt => {
+      elt.style.display = 'block';
+    });
+
+    // If there's an "explanation", open a modal box and show it
     if (data.explanation) {
       showModal('Explanation', data.explanation);
     }
