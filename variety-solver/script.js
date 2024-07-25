@@ -52,14 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
       data = readVpuz(data);
       img.src = data['puzzle-image'];
 
-      // Metadata
+      // Set the page title
       if (data.title) {
         document.title = data.title + ' | ' + document.title;
-        document.getElementById('modal-title').innerHTML = data.title;
       }
-      if (data.author) document.getElementById('modal-author').innerHTML = data.author;
-      if (data.copyright) document.getElementById('modal-copyright').innerHTML = data.copyright;
-      if (data.notes) document.getElementById('modal-notepad').innerHTML = data.notes;
 
       // Clues
       /* TODO: we're living dangerously here and assuming exactly two clue arrays */
@@ -227,15 +223,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
       });
 
+      // Show the modal when the info button is clicked
+      document.getElementById('infoButton').addEventListener('click', function() {
+        // Set the contents of the modal
+        // Title
+        var title = data.title;
+        // Body
+        var bodyHTML = '';
+        if (data.author) bodyHTML += `<p id="modal-author">${data.author}</p>`;
+        if (data.copyright) bodyHTML += `<p id="modal-copyright">${data.copyright}</p>`;
+        if (data.notes) bodyHTML += `<p id="modal-notes">${data.notes}</p>`;
+        // Show the modal
+        showModal(title, bodyHTML);
+      });
+
     }); // end fetch
 }); // end document ready
 
-/** Modal functionality **/
-
-// Show the modal when the button is clicked
-document.getElementById('infoButton').addEventListener('click', function() {
+/** Generic modal functionality **/
+function showModal(title, body) {
+  // set the values
+  document.getElementById('modal-title').innerHTML = title;
+  document.getElementById('modal-body').innerHTML = body;
+  // show the modal
   document.getElementById('infoModal').style.display = 'flex';
-});
+}
 
 // Hide the modal when the close button is clicked
 document.getElementById('closeModal').addEventListener('click', function() {
@@ -321,5 +333,11 @@ function checkIfSolved(data, letters) {
     setTimeout(function() {
         confetti.stop()
     }, 3000);
+
+    // If, in addition, there's an "explanation", open a modal box and show it
+    if (data.explanation) {
+      showModal('Explanation', data.explanation);
+    }
+
   }
 }
