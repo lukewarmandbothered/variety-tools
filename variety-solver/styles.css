@@ -1,5 +1,9 @@
-/** Generic CSS for display **/
+/**
+* (c) 2024, Crossword Nexus
+* MIT License https://mit-license.org/
+**/
 
+/** Generic CSS for display **/
 body {
     margin: 0;
     font-family: Arial, sans-serif;

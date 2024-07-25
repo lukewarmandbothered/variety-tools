@@ -1,3 +1,8 @@
+/**
+* (c) 2024, Crossword Nexus
+* MIT License https://mit-license.org/
+**/
+
 /** Stuff to run once the document is ready **/
 document.addEventListener('DOMContentLoaded', function() {
 
