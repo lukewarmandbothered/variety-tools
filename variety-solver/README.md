@@ -1,5 +1,5 @@
 # Crossword Nexus Variety Puzzle Solver
-#### Make any puzzle with an image and two clue sets available for online solving
+#### Make any variety puzzle available for online solving
 
 ## Installation
 Simply download the files in this repo and add them to your web site.
@@ -18,4 +18,3 @@ Solving using the variety solver is relatively intuitive. Click in the puzzle im
 
 ## License
 This software is released under the MIT License.
-
