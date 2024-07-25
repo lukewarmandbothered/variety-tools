@@ -94,6 +94,14 @@ li.clue-item:hover {
 .clue-text {
 }
 
+/* Clue explanations */
+.clue-explanation {
+  display: none;
+  font-weight: bold;
+  font-style: italic;
+  color: #006400;
+}
+
 /** CSS for the overlay when the canvas is clicked **/
 #overlay {
     position: fixed;
