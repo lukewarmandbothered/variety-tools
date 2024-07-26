@@ -6,234 +6,222 @@
 /**
 * Function that defines what to do when we load a puzzle
 **/
-function loadPuzzle(puzzle) {
-  // Fetch the puzzle and process
-  fetch(puzzle)
-    .then(function (response) {
-      if (response.status === 200 || response.status === 0) {
-        return Promise.resolve(response.json())
-      } else {
-        return Promise.reject(new Error(response.statusText))
+function loadPuzzle(data) {
+    // All the interesting code here
+    const img = document.getElementById('puzzle-image'); // Get the image element
+    const canvas = document.getElementById('canvas'); // Get the canvas element
+    const ctx = canvas.getContext('2d'); // Get the 2D drawing context for the canvas
+
+    /** Define what to do when the image loads **/
+    img.onload = function() {
+      // Set canvas dimensions to match the image dimensions
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+
+      // Adjust the canvas size in the DOM to match the image
+      canvas.style.width = img.width + 'px';
+      canvas.style.height = img.height + 'px';
+    }
+
+    /** Replace the HTML with data from the file **/
+
+    // Puzzle image
+    data = readVpuz(data);
+    img.src = data['puzzle-image'];
+
+    // Set the page title
+    if (data.title) {
+      document.title = data.title + ' | ' + document.title;
+    }
+
+    // Clues
+    var clueHTML = '';
+    for (var i=0; i < data['improved-clues'].length; i++) {
+      // Add a clue panel
+      clueHTML += `<div id="clues-${i}" class="clue-panel">\n`;
+      // Add a title
+      clueHTML += `  <h2 id="clues-${i}-title" class="clues-title">${data['improved-clues'][i].title}</h2>`;
+      // Add a clue list ul
+      clueHTML += `<ul class="clue-list" id="clue-list-${i}">`;
+      // Add the list elements
+      var thisHTML = '';
+      data['improved-clues'][i].clues.forEach(obj => {
+        thisHTML += `
+          <li class="clue-item">
+            <span class="clue-number">${obj.number}</span>
+            <span class="clue-text">${obj.text}</span>`;
+        if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
+        thisHTML += "</li>\n";
+      });
+      clueHTML += thisHTML;
+      // Close all the tags
+      clueHTML += "</ul></div>\n";
+    }
+    // Add this HTML to the DOM
+    document.getElementById("clue-panels").innerHTML = clueHTML;
+
+    /** Now for the puzzle functionality **/
+    // Create and style the overlay and circle elements
+    const overlay = document.createElement('div');
+    const circle = document.createElement('div');
+    overlay.id = 'overlay';
+    circle.id = 'circle';
+    overlay.appendChild(circle);
+    document.body.appendChild(overlay); // Append overlay to the body
+
+    // Explicit dimensions for the circle
+    const circleDiameter = 40;
+    circle.style.width = circleDiameter + 'px';
+    circle.style.height = circleDiameter + 'px';
+
+    let clickX, clickY; // Variables to store click coordinates
+    const letters = []; // Array to store letters and their positions
+
+    // Event listener for canvas clicks
+    document.getElementById('canvas').addEventListener('click', function(event) {
+      const rect = canvas.getBoundingClientRect(); // Get canvas bounding rectangle
+      clickX = event.clientX - rect.left; // Calculate click's X coordinate relative to the canvas
+      clickY = event.clientY - rect.top; // Calculate click's Y coordinate relative to the canvas
+
+      // Calculate circle's position relative to the overlay
+      const circleX = event.clientX - circleDiameter / 2;
+      const circleY = event.clientY - circleDiameter / 2;
+
+      // Position the circle around the clicked area
+      circle.style.transform = `translate(${circleX}px, ${circleY}px)`;
+      overlay.style.display = 'flex'; // Show the overlay
+      overlay.style.pointerEvents = 'auto'; // Enable pointer events for the overlay
+
+      // Add a keydown event listener to capture user input
+      document.addEventListener('keydown', handleKeydown);
+    });
+
+    // Event listener to hide the overlay on click
+    overlay.addEventListener('click', function() {
+        overlay.style.display = 'none'; // Hide the overlay
+        document.removeEventListener('keydown', handleKeydown); // Remove the keydown event listener
+    });
+
+    // Function to handle keydown events
+    function handleKeydown(event) {
+      if (overlay.style.display === 'flex') { // Check if the overlay is displayed
+        const letter = event.key; // Get the pressed key
+        if (letter === 'Backspace' || letter === 'Delete') {
+          removeLetter(clickX, clickY); // Remove letter if Backspace or Delete is pressed
+        } else if (letter.length === 1 && letter.match(/[a-z]/i)) {
+          drawLetter(clickX, clickY, letter); // Draw the letter on the canvas
+        }
+        overlay.style.display = 'none'; // Hide the overlay
+        // Remove the keydown event listener
+        document.removeEventListener('keydown', handleKeydown);
       }
-    })
-    .then(function success(data) {
-      // All the interesting code here
-      const img = document.getElementById('puzzle-image'); // Get the image element
-      const canvas = document.getElementById('canvas'); // Get the canvas element
-      const ctx = canvas.getContext('2d'); // Get the 2D drawing context for the canvas
+    }
 
-      /** Define what to do when the image loads **/
-      img.onload = function() {
-        // Set canvas dimensions to match the image dimensions
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+    // Function to draw a letter centered at (x, y) on the canvas
+    function drawLetter(x, y, letter, push=true) {
+      ctx.font = '20px Arial'; // Set font size and family
+      ctx.fillStyle = 'black'; // Set text color
 
-        // Adjust the canvas size in the DOM to match the image
-        canvas.style.width = img.width + 'px';
-        canvas.style.height = img.height + 'px';
+      letter = letter.toUpperCase(); // I don't see a reason to allow lowercase
+
+      const textWidth = ctx.measureText(letter).width; // Measure text width
+      const textHeight = parseInt(ctx.font, 10); // Approximate text height
+
+      // Draw the text centered at (x, y)
+      ctx.fillText(letter, x - textWidth / 2, y + textHeight / 2);
+
+      // Store the letter and its position
+      if (push) {
+        letters.push({ x, y, letter, width: textWidth, height: textHeight });
       }
 
-      /** Replace the HTML with data from the file **/
+      // Confetti if needed
+      checkIfSolved(data, letters)
 
-      // Puzzle image
-      data = readVpuz(data);
-      img.src = data['puzzle-image'];
+    }
 
-      // Set the page title
-      if (data.title) {
-        document.title = data.title + ' | ' + document.title;
-      }
+    // Function to remove a letter if clicked and backspace/delete is pressed
+    function removeLetter(x, y) {
+      // Find the letter close to the click coordinates
+      const index = letters.findIndex(letter => {
+        return Math.abs(letter.x - x) < letter.width / 2 && Math.abs(letter.y - y) < letter.height / 2;
+      });
 
-      // Clues
-      var clueHTML = '';
-      for (var i=0; i < data['improved-clues'].length; i++) {
-        // Add a clue panel
-        clueHTML += `<div id="clues-${i}" class="clue-panel">\n`;
-        // Add a title
-        clueHTML += `  <h2 id="clues-${i}-title" class="clues-title">${data['improved-clues'][i].title}</h2>`;
-        // Add a clue list ul
-        clueHTML += `<ul class="clue-list" id="clue-list-${i}">`;
-        // Add the list elements
-        var thisHTML = '';
-        data['improved-clues'][i].clues.forEach(obj => {
-          thisHTML += `
-            <li class="clue-item">
-              <span class="clue-number">${obj.number}</span>
-              <span class="clue-text">${obj.text}</span>`;
-          if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
-          thisHTML += "</li>\n";
+      if (index !== -1) {
+        // Remove the letter from the array
+        letters.splice(index, 1);
+
+        // Clear the canvas and redraw all remaining letters
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        letters.forEach(letter => {
+            drawLetter(letter.x, letter.y, letter.letter, push=false);
         });
-        clueHTML += thisHTML;
-        // Close all the tags
-        clueHTML += "</ul></div>\n";
       }
-      // Add this HTML to the DOM
-      document.getElementById("clue-panels").innerHTML = clueHTML;
+    } // end removeLetter
 
-      /** Now for the puzzle functionality **/
-      // Create and style the overlay and circle elements
-      const overlay = document.createElement('div');
-      const circle = document.createElement('div');
-      overlay.id = 'overlay';
-      circle.id = 'circle';
-      overlay.appendChild(circle);
-      document.body.appendChild(overlay); // Append overlay to the body
+    /** Dealing with clue note boxes **/
+    // Select all .clue-item elements
+    const items = document.querySelectorAll('.clue-item');
 
-      // Explicit dimensions for the circle
-      const circleDiameter = 40;
-      circle.style.width = circleDiameter + 'px';
-      circle.style.height = circleDiameter + 'px';
+    // Loop through each item and add event listeners
+    items.forEach(item => {
+       item.addEventListener('click', function() {
+           // Check if the input box already exists
+           let inputBox = item.querySelector('.input-box');
 
-      let clickX, clickY; // Variables to store click coordinates
-      const letters = []; // Array to store letters and their positions
+           // If not, create the input box
+           if (!inputBox) {
+               inputBox = document.createElement('input');
+               inputBox.type = 'text';
+               inputBox.className = 'input-box';
 
-      // Event listener for canvas clicks
-      document.getElementById('canvas').addEventListener('click', function(event) {
-        const rect = canvas.getBoundingClientRect(); // Get canvas bounding rectangle
-        clickX = event.clientX - rect.left; // Calculate click's X coordinate relative to the canvas
-        clickY = event.clientY - rect.top; // Calculate click's Y coordinate relative to the canvas
+               // Add input event listener to the input box
+               inputBox.addEventListener('input', function() {
+                   if (inputBox.value.trim() === '') {
+                       inputBox.style.display = 'none'; // Hide if input is empty
+                   } else {
+                       inputBox.style.display = 'block'; // Show if input is not empty
+                   }
+               });
 
-        // Calculate circle's position relative to the overlay
-        const circleX = event.clientX - circleDiameter / 2;
-        const circleY = event.clientY - circleDiameter / 2;
+               // Add keydown event listener to the input box
+               inputBox.addEventListener('keydown', function(event) {
+                   if (event.key === 'Enter') {
+                       inputBox.blur(); // Remove focus when Enter is pressed
+                   }
+               });
 
-        // Position the circle around the clicked area
-        circle.style.transform = `translate(${circleX}px, ${circleY}px)`;
-        overlay.style.display = 'flex'; // Show the overlay
-        overlay.style.pointerEvents = 'auto'; // Enable pointer events for the overlay
+               // Append the input box to the item
+               item.appendChild(inputBox);
+           }
 
-        // Add a keydown event listener to capture user input
-        document.addEventListener('keydown', handleKeydown);
-      });
+           // Show and focus the input box when the item is clicked
+           inputBox.style.display = 'block';
+           inputBox.focus();
+       });
 
-      // Event listener to hide the overlay on click
-      overlay.addEventListener('click', function() {
-          overlay.style.display = 'none'; // Hide the overlay
-          document.removeEventListener('keydown', handleKeydown); // Remove the keydown event listener
-      });
+       // Add blur event listener to hide the input box if it's empty
+       item.addEventListener('focusout', function(event) {
+           if (event.target.className === 'input-box' && event.target.value.trim() === '') {
+               event.target.style.display = 'none';
+           }
+       });
 
-      // Function to handle keydown events
-      function handleKeydown(event) {
-        if (overlay.style.display === 'flex') { // Check if the overlay is displayed
-          const letter = event.key; // Get the pressed key
-          if (letter === 'Backspace' || letter === 'Delete') {
-            removeLetter(clickX, clickY); // Remove letter if Backspace or Delete is pressed
-          } else if (letter.length === 1 && letter.match(/[a-z]/i)) {
-            drawLetter(clickX, clickY, letter); // Draw the letter on the canvas
-          }
-          overlay.style.display = 'none'; // Hide the overlay
-          // Remove the keydown event listener
-          document.removeEventListener('keydown', handleKeydown);
-        }
-      }
+    });
 
-      // Function to draw a letter centered at (x, y) on the canvas
-      function drawLetter(x, y, letter, push=true) {
-        ctx.font = '20px Arial'; // Set font size and family
-        ctx.fillStyle = 'black'; // Set text color
-
-        letter = letter.toUpperCase(); // I don't see a reason to allow lowercase
-
-        const textWidth = ctx.measureText(letter).width; // Measure text width
-        const textHeight = parseInt(ctx.font, 10); // Approximate text height
-
-        // Draw the text centered at (x, y)
-        ctx.fillText(letter, x - textWidth / 2, y + textHeight / 2);
-
-        // Store the letter and its position
-        if (push) {
-          letters.push({ x, y, letter, width: textWidth, height: textHeight });
-        }
-
-        // Confetti if needed
-        checkIfSolved(data, letters)
-
-      }
-
-      // Function to remove a letter if clicked and backspace/delete is pressed
-      function removeLetter(x, y) {
-        // Find the letter close to the click coordinates
-        const index = letters.findIndex(letter => {
-          return Math.abs(letter.x - x) < letter.width / 2 && Math.abs(letter.y - y) < letter.height / 2;
-        });
-
-        if (index !== -1) {
-          // Remove the letter from the array
-          letters.splice(index, 1);
-
-          // Clear the canvas and redraw all remaining letters
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          letters.forEach(letter => {
-              drawLetter(letter.x, letter.y, letter.letter, push=false);
-          });
-        }
-      } // end removeLetter
-
-      /** Dealing with clue note boxes **/
-      // Select all .clue-item elements
-      const items = document.querySelectorAll('.clue-item');
-
-      // Loop through each item and add event listeners
-      items.forEach(item => {
-         item.addEventListener('click', function() {
-             // Check if the input box already exists
-             let inputBox = item.querySelector('.input-box');
-
-             // If not, create the input box
-             if (!inputBox) {
-                 inputBox = document.createElement('input');
-                 inputBox.type = 'text';
-                 inputBox.className = 'input-box';
-
-                 // Add input event listener to the input box
-                 inputBox.addEventListener('input', function() {
-                     if (inputBox.value.trim() === '') {
-                         inputBox.style.display = 'none'; // Hide if input is empty
-                     } else {
-                         inputBox.style.display = 'block'; // Show if input is not empty
-                     }
-                 });
-
-                 // Add keydown event listener to the input box
-                 inputBox.addEventListener('keydown', function(event) {
-                     if (event.key === 'Enter') {
-                         inputBox.blur(); // Remove focus when Enter is pressed
-                     }
-                 });
-
-                 // Append the input box to the item
-                 item.appendChild(inputBox);
-             }
-
-             // Show and focus the input box when the item is clicked
-             inputBox.style.display = 'block';
-             inputBox.focus();
-         });
-
-         // Add blur event listener to hide the input box if it's empty
-         item.addEventListener('focusout', function(event) {
-             if (event.target.className === 'input-box' && event.target.value.trim() === '') {
-                 event.target.style.display = 'none';
-             }
-         });
-
-      });
-
-      // Show the modal when the info button is clicked
-      document.getElementById('infoButton').addEventListener('click', function() {
-        // Set the contents of the modal
-        // Title
-        var title = data.title;
-        // Body
-        var bodyHTML = '';
-        if (data.author) bodyHTML += `<p id="modal-author">${data.author}</p>`;
-        if (data.copyright) bodyHTML += `<p id="modal-copyright">${data.copyright}</p>`;
-        if (data.notes) bodyHTML += `<p id="modal-notes">${data.notes}</p>`;
-        // Show the modal
-        showModal(title, bodyHTML);
-      });
-
-    }); // end fetch
+    // Show the modal when the info button is clicked
+    document.getElementById('infoButton').addEventListener('click', function() {
+      // Set the contents of the modal
+      // Title
+      var title = data.title;
+      // Body
+      var bodyHTML = '';
+      if (data.author) bodyHTML += `<p id="modal-author">${data.author}</p>`;
+      if (data.copyright) bodyHTML += `<p id="modal-copyright">${data.copyright}</p>`;
+      if (data.notes) bodyHTML += `<p id="modal-notes">${data.notes}</p>`;
+      // Show the modal
+      showModal(title, bodyHTML);
+    });
 } // end loadPuzzle
 
 /** Generic modal functionality **/
@@ -344,6 +332,17 @@ function checkIfSolved(data, letters) {
     }
   }
 } // end checkIfSolved
+
+/**
+* Functions for loading a puzzle from the user
+**/
+
+// Clicking the button opens the file menu
+const openVpuzButton = document.getElementById('open-vpuz-button');
+const openVpuzInput = document.getElementById('open-vpuz-input');
+openVpuzButton.addEventListener('click', function() {
+    openVpuzInput.click();
+});
 
 /** Helper function to check if the browser has drag-and-drop capability **/
 function supportsDragAndDrop() {

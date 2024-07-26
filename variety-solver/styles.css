@@ -12,6 +12,13 @@ body {
     overflow: hidden;
 }
 
+#puzzle-container {
+    display: none;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+}
+
 #container {
     display: flex;
     align-items: flex-start;
@@ -177,4 +184,52 @@ li.clue-item:hover {
 .modal-close {
     font-size: 24px;
     cursor: pointer;
+}
+
+/**
+* Open puzzle overlay
+**/
+
+div.cw-open-holder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 4;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+div.cw-overflow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: white;
+    z-index: -1;
+}
+
+.cw-open-puzzle {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px;
+    text-align: center;
+}
+
+/* we don't show the file input button */
+.cw-open-holder input {
+    visibility: hidden;
+    position: absolute;
+}
+
+/* drag-and-drop style */
+div.has-advanced-upload {
+    outline: 2px dashed gray;
+    outline-offset: -10px;
 }
