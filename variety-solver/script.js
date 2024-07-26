@@ -3,32 +3,6 @@
 * MIT License https://mit-license.org/
 **/
 
-/** Stuff to run once the document is ready **/
-document.addEventListener('DOMContentLoaded', function() {
-
-  /**
-  * TODO: I think this is an ugly way to do this
-  * but I'm unfamiliar with promises and such
-  * Does anyone want to modularize this further?
-  **/
-
-  // check that fetch is enabled
-  if(typeof window.fetch !== "function") {
-    alert('Please upgrade to a modern browser');
-  }
-
-  // Grab puzzle from query string if available
-  var url = new URL(window.location.href);
-  var puzzle = url.searchParams.get("puzzle");
-  if (!puzzle) puzzle = url.searchParams.get("file");
-
-  // We default to the flower power puzzle if one is not there
-  if (!puzzle) puzzle = "flowerpower.vpuz";
-
-  loadPuzzle(puzzle);
-
-}); // end document ready
-
 /**
 * Function that defines what to do when we load a puzzle
 **/
