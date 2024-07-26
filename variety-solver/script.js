@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // We default to the flower power puzzle if one is not there
   if (!puzzle) puzzle = "flowerpower.vpuz";
 
+  loadPuzzle(puzzle);
+
+}); // end document ready
+
+/**
+* Function that defines what to do when we load a puzzle
+**/
+function loadPuzzle(puzzle) {
   // Fetch the puzzle and process
   fetch(puzzle)
     .then(function (response) {
@@ -252,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
     }); // end fetch
-}); // end document ready
+} // end loadPuzzle
 
 /** Generic modal functionality **/
 function showModal(title, body) {
@@ -360,6 +368,11 @@ function checkIfSolved(data, letters) {
     if (data.explanation) {
       showModal('Explanation', data.explanation);
     }
-
   }
+} // end checkIfSolved
+
+/** Helper function to check if the browser has drag-and-drop capability **/
+function supportsDragAndDrop() {
+    var div = document.createElement('div');
+    return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
 }
