@@ -12,6 +12,8 @@ function loadPuzzle(data) {
     const canvas = document.getElementById('canvas'); // Get the canvas element
     const ctx = canvas.getContext('2d'); // Get the 2D drawing context for the canvas
 
+    const fontSize = 20; // font size -- should we make this configurable?
+
     /** Define what to do when the image loads **/
     img.onload = function() {
       // Set canvas dimensions to match the image dimensions
@@ -70,7 +72,7 @@ function loadPuzzle(data) {
     document.body.appendChild(overlay); // Append overlay to the body
 
     // Explicit dimensions for the circle
-    const circleDiameter = 40;
+    const circleDiameter = fontSize * 1.5;
     circle.style.width = circleDiameter + 'px';
     circle.style.height = circleDiameter + 'px';
 
@@ -119,7 +121,7 @@ function loadPuzzle(data) {
 
     // Function to draw a letter centered at (x, y) on the canvas
     function drawLetter(x, y, letter, push=true) {
-      ctx.font = '20px Arial'; // Set font size and family
+      ctx.font = `${fontSize}px Arial`; // Set font size and family
       ctx.fillStyle = 'black'; // Set text color
 
       letter = letter.toUpperCase(); // I don't see a reason to allow lowercase
