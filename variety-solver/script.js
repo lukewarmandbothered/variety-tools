@@ -268,7 +268,7 @@ function readVpuz(data) {
     titles.forEach( function(title) {
         var thisClues = [];
         data['clues'][title].forEach( function (clue) {
-            var number = '', text = ''; explanation = null;
+            var number = '•', text = ''; explanation = null;
             // a "clue" can be an array or an object (or a string?)
             if (Array.isArray(clue)) {
                 number = clue[0].toString();
