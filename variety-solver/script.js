@@ -12,7 +12,12 @@ function loadPuzzle(data) {
     const canvas = document.getElementById('canvas'); // Get the canvas element
     const ctx = canvas.getContext('2d'); // Get the 2D drawing context for the canvas
 
+    // Initialize the "letters" array
+    var letters;
+
+    // Default variables
     const fontSize = 20; // font size -- should we make this configurable?
+    const saveTime = 10000; // how long to keep the localStorage
 
     /** Define what to do when the image loads **/
     img.onload = function() {
@@ -23,6 +28,11 @@ function loadPuzzle(data) {
       // Adjust the canvas size in the DOM to match the image
       canvas.style.width = img.width + 'px';
       canvas.style.height = img.height + 'px';
+
+      // If there are letters, render them
+      letters.forEach(letter => {
+        drawLetter(letter.x, letter.y, letter.letter, push=false);
+      });
     }
 
     /** Replace the HTML with data from the file **/
@@ -77,7 +87,7 @@ function loadPuzzle(data) {
     circle.style.height = circleDiameter + 'px';
 
     let clickX, clickY; // Variables to store click coordinates
-    const letters = []; // Array to store letters and their positions
+    letters = lscache.get(data.savefile) || []; // Array to store letters and their positions
 
     // Event listener for canvas clicks
     document.getElementById('canvas').addEventListener('click', function(event) {
@@ -135,10 +145,11 @@ function loadPuzzle(data) {
       // Store the letter and its position
       if (push) {
         letters.push({ x, y, letter, width: textWidth, height: textHeight });
+        lscache.set(data.savefile, letters, saveTime);
       }
 
       // Confetti if needed
-      checkIfSolved(data, letters)
+      checkIfSolved(data, letters);
 
     }
 
@@ -152,6 +163,7 @@ function loadPuzzle(data) {
       if (index !== -1) {
         // Remove the letter from the array
         letters.splice(index, 1);
+        lscache.set(data.savefile, letters, saveTime);
 
         // Clear the canvas and redraw all remaining letters
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -249,6 +261,10 @@ document.getElementById('infoModal').addEventListener('click', function(event) {
 
 /** vPuz parsing **/
 function readVpuz(data) {
+
+    // Get the hash of the data
+    data['savefile'] = 'cnvs_' + hashCode(JSON.stringify(data));
+
     // If there's a "solution-string", add a sorted version
     if (data['solution-string']) {
       data['solution-string-sorted'] = sortString(data['solution-string']);
@@ -350,4 +366,18 @@ openVpuzButton.addEventListener('click', function() {
 function supportsDragAndDrop() {
     var div = document.createElement('div');
     return ('draggable' in div) || ('ondragstart' in div && 'ondrop' in div);
+}
+
+/**
+* Simple hash function
+* via https://stackoverflow.com/a/8831937
+**/
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0, len = str.length; i < len; i++) {
+        let chr = str.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash.toString();
 }
