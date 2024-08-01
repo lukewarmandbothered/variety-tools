@@ -51,7 +51,7 @@ function loadPuzzle(data) {
         thisHTML += `
           <li class="clue-item">
             <span class="clue-number">${obj.number}</span>
-            <span class="clue-text">${obj.text};
+            <span class="clue-text">${obj.text}
             <input class="input-box note-style" type="text">
             </span>`
         if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
