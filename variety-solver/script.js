@@ -51,7 +51,9 @@ function loadPuzzle(data) {
         thisHTML += `
           <li class="clue-item">
             <span class="clue-number">${obj.number}</span>
-            <span class="clue-text">${obj.text}</span>`;
+            <span class="clue-text">${obj.text};
+            <input class="input-box note-style" type="text">
+            </span>`
         if (obj.explanation) thisHTML += `<span class="clue-explanation">${obj.explanation}</span>\n`;
         thisHTML += "</li>\n";
       });
@@ -165,51 +167,41 @@ function loadPuzzle(data) {
     // Select all .clue-item elements
     const items = document.querySelectorAll('.clue-item');
 
+    // Function to check input box value and hide/show accordingly
+    function checkInputBox(inputBox) {
+      if (inputBox.value.trim() === '') {
+        inputBox.style.display = 'none'; // Hide if input is empty
+    } else {
+        inputBox.style.display = 'block'; // Show if input is not empty
+    }
+    }
+
     // Loop through each item and add event listeners
     items.forEach(item => {
-       item.addEventListener('click', function() {
-           // Check if the input box already exists
-           let inputBox = item.querySelector('.input-box');
+      item.addEventListener('click', function() {
+        // Find the input box within the clicked item
+        let inputBox = item.querySelector('.input-box');
 
-           // If not, create the input box
-           if (!inputBox) {
-               inputBox = document.createElement('input');
-               inputBox.type = 'text';
-               inputBox.className = 'input-box';
+        // Show and focus the input box when the item is clicked
+        inputBox.style.display = 'block';
+        inputBox.focus();
+      });
 
-               // Add input event listener to the input box
-               inputBox.addEventListener('input', function() {
-                   if (inputBox.value.trim() === '') {
-                       inputBox.style.display = 'none'; // Hide if input is empty
-                   } else {
-                       inputBox.style.display = 'block'; // Show if input is not empty
-                   }
-               });
-
-               // Add keydown event listener to the input box
-               inputBox.addEventListener('keydown', function(event) {
-                   if (event.key === 'Enter') {
-                       inputBox.blur(); // Remove focus when Enter is pressed
-                   }
-               });
-
-               // Append the input box to the item
-               item.appendChild(inputBox);
-           }
-
-           // Show and focus the input box when the item is clicked
-           inputBox.style.display = 'block';
-           inputBox.focus();
-       });
-
-       // Add blur event listener to hide the input box if it's empty
-       item.addEventListener('focusout', function(event) {
-           if (event.target.className === 'input-box' && event.target.value.trim() === '') {
-               event.target.style.display = 'none';
-           }
-       });
-
+    // Add input event listener to check visibility
+    item.addEventListener('input', function(event) {
+       if (event.target.classList.contains('input-box')) {
+           checkInputBox(event.target);
+       }
     });
+
+    // Add blur event listener to hide the input box if it's empty
+    item.addEventListener('focusout', function(event) {
+       if (event.target.classList.contains('input-box')) {
+           checkInputBox(event.target);
+       }
+    });
+  });
+
 
     // Show the modal when the info button is clicked
     document.getElementById('infoButton').addEventListener('click', function() {
