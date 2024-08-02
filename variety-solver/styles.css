@@ -61,6 +61,7 @@ h2.clues-title {
   padding: 0;
   margin: 0px 0px 5px 0px;
   font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 #clue-panels {
@@ -72,8 +73,11 @@ h2.clues-title {
 }
 
 .clue-panel {
-    flex: 1; /* Each panel will take up an equal portion of the height */
-    overflow-y: scroll;
+    /*flex: 1; /* Each panel will take up an equal portion of the height */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
     border: 1px solid #ccc;
     padding: 5px;
     background: #f9f9f9;
@@ -83,7 +87,9 @@ h2.clues-title {
 /* no bullets on clue lists */
 .clue-list {
     margin-top: 0;
+    margin-bottom: 0;
     padding: 0;
+    overflow-y: auto;
 }
 
 /* Space between clues */
@@ -91,6 +97,7 @@ h2.clues-title {
     margin-bottom: 5px;
     cursor: pointer;
     display: flex;
+    list-style: none;
 }
 
 .clue-item:hover {
