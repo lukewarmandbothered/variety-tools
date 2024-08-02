@@ -175,6 +175,17 @@ function loadPuzzle(data) {
       }
     } // end removeLetter
 
+      // Function to save input-box text to localStorage
+      function saveInputBoxText(inputBox) {
+          
+      // Create a unique key for each input box based on its parent clue item
+      const clueItem = inputBox.closest('.clue-item');
+      const key = `input-${clueItem.querySelector('.clue-number').innerText}`;
+    
+      // Save the input box value to localStorage
+      lscache.set(key, inputBox.value, saveTime);
+      }
+
     /** Dealing with clue note boxes **/
     // Select all .clue-item elements
     const items = document.querySelectorAll('.clue-item');
@@ -189,30 +200,44 @@ function loadPuzzle(data) {
     }
 
     // Loop through each item and add event listeners
-    items.forEach(item => {
-      item.addEventListener('click', function() {
-        // Find the input box within the clicked item
-        let inputBox = item.querySelector('.input-box');
+  items.forEach(item => {
+    // Find the input box within the clicked item
+    let inputBox = item.querySelector('.input-box');
 
-        // Show and focus the input box when the item is clicked
-        inputBox.style.display = 'block';
-        inputBox.focus();
-      });
+    // Create a unique key for each input box based on its parent clue item
+    const key = `input-${item.querySelector('.clue-number').innerText}`;
 
-    // Add input event listener to check visibility
-    item.addEventListener('input', function(event) {
-       if (event.target.classList.contains('input-box')) {
-           checkInputBox(event.target);
-       }
-    });
+    // Load the saved input box value from localStorage
+    const savedText = lscache.get(key);
+    if (savedText) {
+      inputBox.value = savedText;
+      inputBox.style.display = 'block'; // Show the input box if there is saved text
+    } else {
+      inputBox.style.display = 'none'; // Hide if no saved text
+    }
 
-    // Add blur event listener to hide the input box if it's empty
-    item.addEventListener('focusout', function(event) {
-       if (event.target.classList.contains('input-box')) {
-           checkInputBox(event.target);
-       }
-    });
+  // Add input event listener to check visibility
+  item.addEventListener('input', function(event) {
+    if (event.target.classList.contains('input-box')) {
+      checkInputBox(event.target);
+      saveInputBoxText(event.target);
+    }
   });
+
+  // Add blur event listener to hide the input box if it's empty
+  item.addEventListener('focusout', function(event) {
+    if (event.target.classList.contains('input-box')) {
+      checkInputBox(event.target);
+      saveInputBoxText(event.target);
+    }
+  });
+
+  item.addEventListener('click', function() {
+    // Show and focus the input box when the item is clicked
+    inputBox.style.display = 'block';
+    inputBox.focus();
+  });
+});
 
 
     // Show the modal when the info button is clicked
